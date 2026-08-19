@@ -8,9 +8,19 @@ API REST construida con .NET 10 siguiendo los principios de Clean Architecture. 
 - [Docker](https://www.docker.com/) (para SQL Server y Redis)
 - [ngrok](https://ngrok.com/) (para webhooks de MercadoPago)
 
-## Inicio desde cero (clone recién clonado)
+## Inicio desde cero 
 
-### 1. Levantar infraestructura
+### 1. Verificar prerrequisitos
+
+Asegúrate de tener instalados:
+
+| Herramienta | Versión mínima | Verificar |
+|------------|----------------|-----------|
+| [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) | 10.0 | `dotnet --version` |
+| [Docker](https://www.docker.com/) | | `docker --version` |
+| [ngrok](https://ngrok.com/) (solo si usás webhooks en local) | | `ngrok version` |
+
+### 2. Levantar infraestructura
 
 Desde la carpeta `PaymentGateway/`:
 
@@ -22,13 +32,16 @@ Esto levanta:
 - **SQL Server 2022** en `localhost:1433`
 - **Redis** en `localhost:6379`
 
-### 2. Restaurar dependencias
+### 3. Restaurar dependencias y herramientas
 
 ```bash
 dotnet restore
+dotnet tool restore
 ```
 
-### 3. Configurar la base de datos
+`dotnet tool restore` instala `dotnet-ef` (definido en `dotnet-tools.json`) que se usa para las migraciones.
+
+### 4. Configurar la base de datos
 
 Como no hay migraciones en el repositorio, es necesario generarlas:
 
@@ -42,9 +55,9 @@ dotnet ef database update \
   --startup-project PaymentGateway.API
 ```
 
-### 4. Configurar variables
+### 5. Configurar variables de entorno
 
-Editar el archivo `PaymentGateway.API/appsettings.Development.json` con los valores correspondientes:
+Crear manualmente el archivo `PaymentGateway.API/appsettings.Development.json` con los valores correspondientes:
 
 | Sección | Descripción |
 |---------|------------|
@@ -55,9 +68,11 @@ Editar el archivo `PaymentGateway.API/appsettings.Development.json` con los valo
 | `JwtSettings:Issuer` / `Audience` | Emisor y audiencia del JWT |
 | `EmailSettings:SmtpServer`, `Port`, `SenderEmail`, `SenderPassword` | Credenciales SMTP para envío de PINs |
 
-### 5. Configurar webhook de MercadoPago
+### 6. Configurar webhook de MercadoPago
 
-El webhook de notificaciones de pago está configurado en `PaymentGateway.Infrastructure/Services/MercadoPagoService.cs`. En desarrollo local se usa ngrok para exponer el endpoint:
+El webhook de notificaciones de pago está configurado en `PaymentGateway.Infrastructure/Services/MercadoPagoService.cs`. En desarrollo local se usa ngrok para exponer el endpoint.
+
+> **Nota:** ngrok requiere una cuenta gratuita para generar URLs persistentes. Registrarse en [ngrok.com](https://ngrok.com/) y configurar el authtoken.
 
 ```bash
 ngrok http 5076
@@ -65,7 +80,7 @@ ngrok http 5076
 
 Copiar la URL pública generada (ej: `https://xxxx.ngrok-free.dev`) y actualizar la propiedad `NotificationUrl` en `MercadoPagoService.cs`.
 
-### 6. Ejecutar la API
+### 7. Ejecutar la API
 
 ```bash
 dotnet run --project PaymentGateway.API
