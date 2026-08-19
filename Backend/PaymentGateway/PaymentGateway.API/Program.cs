@@ -54,7 +54,7 @@ builder.Services.AddScoped<
 
 builder.Services.AddScoped<
     PaymentGateway.Application.Interfaces.IEmailService,
-    PaymentGateway.Infrastructure.Services.DevEmailService
+    PaymentGateway.Infrastructure.Services.SmtpEmailService
 >();
 
 //JWT
@@ -67,6 +67,8 @@ builder.Services.AddScoped<
     PaymentGateway.Application.Interfaces.IOrderService,
     PaymentGateway.Infrastructure.Services.OrderService
 >();
+
+builder.Services.AddHostedService<PaymentGateway.Infrastructure.Services.OrderCleanupService>();
 
 // CONFIGURACION M.P.
 var mercadoPagoToken = builder.Configuration["MercadoPago:AccesToken"];
@@ -113,7 +115,11 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:3000", "http://localhost:5173")
+                .WithOrigins(
+                    "http://localhost:3000",
+                    "http://localhost:5173",
+                    " http://localhost:5173"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         }

@@ -45,8 +45,36 @@ public class OrderRepository : IOrderRepository
         return await _context
             .Orders.Include(o => o.OrderItems)
             .Where(o => o.IdCustomer == customerId && o.Status == "APPROVED")
-            // Compras recientes primero
             .OrderByDescending(o => o.DatePurchase)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Order>> GetNonApprovedOrdersByCustomerIdAsync(int customerId)
+    {
+        return await _context
+            .Orders.Include(o => o.OrderItems)
+            .Where(o => o.IdCustomer == customerId && o.Status != "APPROVED")
+            .OrderByDescending(o => o.DatePurchase)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetStalePendingOrdersAsync(DateTime cutoff)
+    {
+        return await _context
+            .Orders.Where(o =>
+                (o.Status == "Pending" || o.Status == "PENDING_PAYMENT")
+                && o.DatePurchase < cutoff
+            )
+            .ToListAsync();
+    }
+
+    public async Task CancelOrdersAsync(IEnumerable<Order> orders)
+    {
+        foreach (var order in orders)
+        {
+            order.Status = "CANCELLED";
+            _context.Orders.Update(order);
+        }
+        await _context.SaveChangesAsync();
     }
 }

@@ -11,4 +11,10 @@ public interface IOrderRepository
     Task UpdateOrderAsync(Order order);
 
     Task<IEnumerable<Order>> GetApprovedOrdersByCustomerIdAsync(int customerId);
+
+    Task<IEnumerable<Order>> GetNonApprovedOrdersByCustomerIdAsync(int customerId);
+
+    Task<List<Order>> GetStalePendingOrdersAsync(DateTime cutoff);
+
+    Task CancelOrdersAsync(IEnumerable<Order> orders);
 }

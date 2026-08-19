@@ -19,10 +19,8 @@ public class OrdersController : ControllerBase
     [HttpGet("my-purchases")]
     public async Task<IActionResult> GetMyPurchases()
     {
-        // 1. Extracción segura JWT
         var customerIdClaim = User.FindFirst("idCustomer")?.Value;
 
-        // 2. Validación de seguridad (token viejo y no tiene el claim)
         if (
             string.IsNullOrEmpty(customerIdClaim)
             || !int.TryParse(customerIdClaim, out int customerId)
@@ -32,6 +30,24 @@ public class OrdersController : ControllerBase
         }
 
         var purchases = await _orderService.GetCustomerPurchasesAsync(customerId);
+
+        return Ok(purchases);
+    }
+
+    [HttpGet("my-purchases-pending")]
+    public async Task<IActionResult> GetMyPendingPurchases()
+    {
+        var customerIdClaim = User.FindFirst("idCustomer")?.Value;
+
+        if (
+            string.IsNullOrEmpty(customerIdClaim)
+            || !int.TryParse(customerIdClaim, out int customerId)
+        )
+        {
+            return Unauthorized("El token no contiene una identificación de cliente válida.");
+        }
+
+        var purchases = await _orderService.GetCustomerNonApprovedPurchasesAsync(customerId);
 
         return Ok(purchases);
     }

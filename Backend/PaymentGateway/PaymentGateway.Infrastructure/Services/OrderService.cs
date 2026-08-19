@@ -16,16 +16,37 @@ public class OrderService : IOrderService
     {
         var orders = await _orderRepository.GetApprovedOrdersByCustomerIdAsync(customerId);
 
-        // Mapeo DTO
         return orders.Select(o => new PurchaseResponseDTO
         {
             OrderId = o.IdOrder,
             CreatedAt = o.DatePurchase,
+            Status = o.Status,
+            MercadoPagoPreferenceId = o.MercadoPagoPreferenceId,
             Items = o
                 .OrderItems.Select(item => new PurchasedItemDTO
                 {
                     ProductName = item.ProductName,
-                    // Simulamos un link de descarga temporal
+                    DownloadUrl =
+                        $"https://api.tu-reserva.com/downloads/{item.IdOrderItem}?token=temp",
+                })
+                .ToList(),
+        });
+    }
+
+    public async Task<IEnumerable<PurchaseResponseDTO>> GetCustomerNonApprovedPurchasesAsync(int customerId)
+    {
+        var orders = await _orderRepository.GetNonApprovedOrdersByCustomerIdAsync(customerId);
+
+        return orders.Select(o => new PurchaseResponseDTO
+        {
+            OrderId = o.IdOrder,
+            CreatedAt = o.DatePurchase,
+            Status = o.Status,
+            MercadoPagoPreferenceId = o.MercadoPagoPreferenceId,
+            Items = o
+                .OrderItems.Select(item => new PurchasedItemDTO
+                {
+                    ProductName = item.ProductName,
                     DownloadUrl =
                         $"https://api.tu-reserva.com/downloads/{item.IdOrderItem}?token=temp",
                 })

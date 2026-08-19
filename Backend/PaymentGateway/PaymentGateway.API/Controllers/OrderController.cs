@@ -67,6 +67,7 @@ public class OrderController : ControllerBase
                 order.TotalAmount,
                 order.Status,
                 order.DatePurchase,
+                order.MercadoPagoPreferenceId,
                 Items = order.OrderItems.Select(i => new
                 {
                     i.ProductName,

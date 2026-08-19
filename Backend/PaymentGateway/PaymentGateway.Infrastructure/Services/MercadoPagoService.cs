@@ -31,12 +31,11 @@ public class MercadoPagoService : IPaymentService
             // Asegúrate de que BackUrls esté DENTRO de las llaves de PreferenceRequest
             BackUrls = new PreferenceBackUrlsRequest
             {
-                Success = "https://localhost:3000/checkout/success",
-                Failure = "https://localhost:3000/checkout/failure",
-                Pending = "https://localhost:3000/checkout/pending",
+                Success = "http://localhost:5173/checkout/result?status=approved",
+                Failure = "http://localhost:5173/checkout/result?status=failure",
+                Pending = "http://localhost:5173/checkout/result?status=pending",
             },
 
-            AutoReturn = "approved",
             ExternalReference = order.IdOrder.ToString(),
             // Configuracion destino Webhook
             NotificationUrl = "https://say-brewing-duress.ngrok-free.dev/api/checkout/webhook",
