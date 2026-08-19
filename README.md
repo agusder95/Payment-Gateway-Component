@@ -9,6 +9,7 @@ Sistema de pasarela de pagos que integra MercadoPago como procesador de transacc
 | Frontend | React 19, Vite 8, React Router v7 |
 | Backend | .NET 10, ASP.NET Core Web API |
 | Base de datos | SQL Server 2022 |
+| Autenticación | JSON Web Token (JWT) |
 | Caché | Redis (PINs de autenticación) |
 | Autenticación | JWT |
 | Pagos | MercadoPago SDK |
@@ -44,31 +45,9 @@ Payment-Getaway-Component/
 - [Docker](https://www.docker.com/) (para SQL Server y Redis)
 - [ngrok](https://ngrok.com/) (para recibir webhooks de MercadoPago en desarrollo local)
 
-## Inicio rápido
 
-1. **Levantar infraestructura y backend:**
+## Para más detalles sobre la configuración de cada parte, consultar:
 
-   ```bash
-   cd Backend/PaymentGateway
-   docker compose up -d
-   dotnet ef migrations add InitialCreate --project PaymentGateway.Infrastructure --startup-project PaymentGateway.API
-   dotnet ef database update --project PaymentGateway.Infrastructure --startup-project PaymentGateway.API
-   dotnet run --project PaymentGateway.API
-   ```
-
-   La API estará disponible en `http://localhost:5076` y Swagger en `http://localhost:5076/swagger`.
-
-2. **Levantar el frontend:**
-
-   ```bash
-   cd Frontend/PaymentFront
-   npm install
-   npm run dev
-   ```
-
-   El SPA estará disponible en `http://localhost:5173`.
-
-Para más detalles sobre la configuración de cada parte, consultar:
 - [Backend README](Backend/README.md)
 - [Frontend README](Frontend/README.md)
 
