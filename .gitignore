@@ -141,3 +141,57 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# .NET build output
+bin/
+obj/
+
+# Rider / JetBrains
+.idea/
+*.user
+*.suo
+
+# ========================
+# .NET / C# Backend
+# ========================
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+
+# Visual Studio / Rider extras
+*.userosscache
+*.sln.docstates
+*.csproj.user
+.vs/
+.vscode/
+
+# Docker
+docker-compose.override.yml
+
+# Test results / Coverage
+TestResults/
+*.coverage
+*.coveragexml
+coveragereport/
+
+# Secrets / Environment
+appsettings.Development.json
+appsettings.*.local.json
+secrets.json
+
+# Misc
+thumbs.db
+.DS_Store
+
+# Frontend build artifacts
+Frontend/PaymentFront/node_modules/
+Frontend/PaymentFront/dist/
