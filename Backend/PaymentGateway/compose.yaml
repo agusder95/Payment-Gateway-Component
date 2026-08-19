@@ -2,11 +2,11 @@
 
 services:
   # 1. API (.NET)
-  payment-gateway-api-DB:
+  paymentgateway-api:
     build:
       context: .
       dockerfile: PaymentGateway.API/Dockerfile
-    container_name: payment-gateway-api-DB
+    container_name: paymentgateway-api
     ports:
       - "8080:8080"
     environment:
