@@ -10,6 +10,7 @@ Sistema de pasarela de pagos que integra MercadoPago como procesador de transacc
 | Backend | .NET 10, ASP.NET Core Web API |
 | Base de datos | SQL Server 2022 |
 | Caché | Redis (PINs de autenticación) |
+| Autenticación | JWT |
 | Pagos | MercadoPago SDK |
 | Arquitectura | Clean Architecture (Domain → Application → Infrastructure → API) |
 
